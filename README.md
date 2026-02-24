@@ -1,6 +1,6 @@
 # Patient Data Management System
 
-**Final Semester Project – 6th Semester B.Tech CSE**  
+**6th Semester Final Project B.Tech CSE**  
 **Course: Software Engineering**  
 **SRM University – AP, Andhra Pradesh**  
 **May 2024**
