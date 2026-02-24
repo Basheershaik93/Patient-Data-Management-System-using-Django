@@ -1,0 +1,222 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Department</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'jquery/jquery.slim.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'popper/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery/bootstrap.bundle.min.js' %}"></script>
+    <style>
+        body {
+            background-image: url("{% static 'image/Hospital_Background.jpg' %}");
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: rgb(146, 169, 90);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-left-radius: 50% 20%;
+            border-bottom-right-radius: 50% 20%;
+        }
+
+        .logo {
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 10px;
+        }
+
+        .top-right {
+            color: white;
+            padding: 10px;
+        }
+
+        .top-right-item {
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .form-container {
+            background-color: rgb(135, 194, 58);
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+
+        .form-container label {
+            color: white;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-container input[type="text"],
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .form-container textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        .form-container .btn-container {
+            text-align: center;
+        }
+
+        .form-container .btn-container button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-container .btn-container button.cancel-btn {
+            background-color: red;
+        }
+
+        .form-container .btn-container button.save-btn {
+            background-color: white;
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="logo">Hospital Department</div>
+        <div class="top-right">
+            <span class="top-right-item" onclick="toggleForm()">Fill-Patients details</span>
+            <span class="top-right-item"><a href="{% url 'patient_details' %}">Patients Details</a></span>
+            <span class="top-right-item" onclick="toggleTable()">Medical Bills</span>
+            <span class="top-right-item" onclick="logout()">LogOut</span>
+
+        </div>
+    </div>
+
+    <!-- Patient Details Form -->
+    <div class="form-container" id="patientForm" style="display: none;">
+        <form id="patientDetailsForm" method="post" action="{% url 'ho' %}">
+            {% csrf_token %}
+            <label>Patient ID:</label>
+            <input type="text" id="Patient" value="PAT-{{l}}" name="Patient" readonly>
+
+            <label for="patientName">Patient Name:</label>
+            <input type="text" id="Name" name="Name" required>
+
+            <label for="patientAge">Age:</label>
+            <input type="text" id="Age" name="Age" required>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="" selected disabled>Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+
+            <label for="Email">Email Id:</label>
+            <input type="text" id="Email" name="Email" required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" required>
+
+            <label for="description">Description (max 100 words):</label>
+            <textarea id="description" name="description" maxlength="100" required></textarea>
+
+            <label for="PaymentType">Payment-Type:</label>
+            <select id="PaymentType" name="PaymentType" required>
+                <option value="" selected disabled>Select Type</option>
+                <option value="Cash">cash</option>
+                <option value="Insurance">Insurance</option>
+            </select>
+
+            <div class="btn-container">
+                <button class="save-btn" type="submit">Save & Submit</button>
+                <button class="cancel-btn" type="button" onclick="resetForm()">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" id="table-container" style="display: none;">
+        <h2 class="text-success" style="margin-top: 100px;">Medical Bills</h2>
+        <table class="table table-striped" style="margin-top: 10px;">
+            <thead>
+
+            </thead>
+            <tbody>
+                {% for i in f %}
+                <tr>
+                    <td class="text-light">'{{ i.PatientId }}' Medical bill generated successfully</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="viewMedicalBill('{{ i.PatientId }}')">View</button>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function toggleForm() {
+            var form = document.getElementById("patientForm");
+            if (form.style.display === "none") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
+        }
+
+        function toggleTable() {
+            var tableContainer = document.getElementById("table-container");
+            if (tableContainer.style.display === "none" || tableContainer.style.display === "") {
+                tableContainer.style.display = "block";
+            } else {
+                tableContainer.style.display = "none";
+            }
+        }
+
+        function resetForm() {
+            document.getElementById("patientForm").style.display = "none";
+            document.getElementById("patientDetailsForm").reset();
+        }
+
+        function togglePatientDetails() {
+            var container = document.getElementById("patientDetailsContainer");
+            container.style.display = container.style.display === "none" ? "block" : "none";
+        }
+
+
+        function viewMedicalBill(patientId) {
+            window.location.href = '/view_medical_bill/' + patientId;
+        }
+
+        function logout() {
+            window.location.href = "{% url 'ad' %}";
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.keyCode === 39) {
+                event.preventDefault();
+            }
+        });
+
+    </script>
+</body>
+
+</html>

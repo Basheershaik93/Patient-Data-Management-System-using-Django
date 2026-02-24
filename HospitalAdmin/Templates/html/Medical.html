@@ -1,0 +1,430 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Department</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'jquery/jquery.slim.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'popper/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery/bootstrap.bundle.min.js' %}"></script>
+    <style>
+        body {
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .video-background {
+            position: flex;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .navbar {
+            background-color: rgb(106, 133, 152);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom-left-radius: 50% 20%;
+            border-bottom-right-radius: 50% 20%;
+        }
+
+        .logo {
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            padding: 10px;
+        }
+
+        .top-right {
+            color: white;
+            padding: 10px;
+        }
+
+        .top-right-item {
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .search-bar-container {
+            position: absolute;
+            top: 100px;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            /* Adjust as needed */
+        }
+
+        .form-container {
+            position: relative;
+            /* Change from fixed to relative */
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            max-height: calc(100vh - 200px);
+            /* Adjust max height as needed */
+        }
+
+
+        .search-input {
+            padding: 10px;
+            border-radius: 5px 0 0 5px;
+            border: 1px solid #ccc;
+            width: 300px;
+            /* Adjust as needed */
+        }
+
+        .search-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .panel-content {
+            text-align: center;
+        }
+
+        .form-container {
+            /* Styles for form container, including those of the invoice panel */
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f9f9f9;
+            padding: 50px;
+            border: 1px solid #a93131;
+            border-radius: 5px;
+            z-index: 1;
+            width: 800px;
+        }
+
+        .invoice-panel .input-group {
+            margin-bottom: 15px;
+            /* Adjust spacing between input groups */
+        }
+
+        .form-container .panel-content {
+            /* Styles for the content inside the form container */
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="video-background">
+        <video autoplay loop muted>
+            <source src="{% static 'video/Medical_Background.mp4' %}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="navbar">
+        <div class="logo">Medical Department</div>
+        <div class="top-right">
+            <span class="top-right-item" onclick="toggleTable()">Patients Entries</span>
+            <span class="top-right-item" onclick="toggleTable1()">Medical Bills</span>
+            <span class="top-right-item" onclick="logout()">LogOut</span>
+        </div>
+    </div>
+    <div class="search-bar-container">
+        <form class="search-form" action="#" method="post" onsubmit="return showDropdowns()">
+            {% csrf_token %}
+            <input type="text" class="search-input" placeholder="Search..." name="na" id="searchInput">
+            <button type="submit" class="search-button">
+                <img src="{% static 'image/search-icon.png' %}" alt="Search">
+            </button>
+        </form>
+    </div>
+    <div class="container" id="table-container" style="display: none;">
+        <h2 class="text-success" style="margin-top: 100px;">Notifications</h2>
+        <table class="table table-striped" style="margin-top: 10px;">
+            <thead>
+                <!-- Table header content here -->
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td class="text-light">'{{ patient.PatientId }}' successfully created in real Time</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="form-container" id="form-container" style="display: none;">
+        <form class="invoice-panel" id="invoice-panel" action="{% url 'med' %}" method="post">
+            {% csrf_token %}
+            <div class="text-info">
+                <h2>Invoice</h2>
+                <div class="input-group">
+                    <div class="input-group">
+                        <label for="Patient" class="text-dark">Patient ID: </label>
+                        <input value="{{id}}" name="patan" readonly></input>
+                        <label for="Name" class="text-dark" style="margin-left: 20px;">Patient Name:</label>
+                        <input value="{{w}}" readonly></input>
+                    </div>
+                    <div class="input-group" style="margin-top: 10px;">
+                        <label for="Email" class="text-dark">Email Id: </label>
+                        <input value="{{Q}}" readonly></input>
+                        <label for="description" class="text-dark" style="margin-left: 30px;">Description: </label>
+                        <input value="{{e}}" readonly></input>
+                    </div>
+                    <div class="input-group" style="margin-top: 10px;">
+                        <p class="fw-bold">Date: <span class="text-muted"><input name="dt" type="date" class=""
+                                    aria-label="" required></span></p>
+
+                        <label for="MedicineT" style="margin-left: 120px;">Medicine:</label>
+                        <select class="ml-4" id="MedicineT" name="MedicineT">
+                            <option value="" selected disabled>Select Medicine</option>
+                            {% for i in q.keys %}
+                            <option value="{{i}}">{{i}}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" onclick="addMedicine()" class="btn btn-primary ml-3">Add medicine</button>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Si. No</th>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="medicine-table-body">
+                        <!-- You can populate this table dynamically with JavaScript -->
+                    </tbody>
+                </table>
+                <!-- Total Amount -->
+                <div class="input-group">
+                    <label for="totalAmount">Total Amount:</label>
+                    <input class="ml-4" id="totalAmount" value="0" name="totalAmount" readonly>
+                </div>
+                <div class="btn-container">
+                    <button class="save-btn" type="submit">Proceed</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container" id="table-container1" style="display: none;">
+        <h2 class="text-success" style="margin-top: 100px;">Medical Bills</h2>
+        <table class="table table-striped" style="margin-top: 10px;">
+            <thead>
+                <!-- Table header content here -->
+            </thead>
+            <tbody>
+                {% for patient in patients %}
+                <tr>
+                    <td class="text-light">'{{ patient.PatientId }}' Medical Bills successfully created</td>
+                    <td>
+                        <button class="btn btn-primary"
+                            onclick="viewMedicalBill('{{ patient.PatientId }}')">View</button>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+    <script>
+        var invoiceVisible = false;
+
+
+        function toggleTable() {
+            var tableContainer = document.getElementById("table-container");
+            if (tableContainer.style.display === "none" || tableContainer.style.display === "") {
+                tableContainer.style.display = "block";
+            } else {
+                tableContainer.style.display = "none";
+            }
+        }
+
+        function toggleTable1() {
+            var tableContainer = document.getElementById("table-container1");
+            if (tableContainer.style.display === "none" || tableContainer.style.display === "") {
+                tableContainer.style.display = "block";
+            } else {
+                tableContainer.style.display = "none";
+            }
+        }
+
+
+
+        var selectedMedicineNames = []; 
+
+        function addMedicine() {
+            var selectedMedicine = document.getElementById("MedicineT").value;
+            if (selectedMedicine) {
+                var tableBody = document.getElementById("medicine-table-body");
+                var rowCount = tableBody.rows.length;
+                var medicineExists = false;
+
+                
+                for (var i = 0; i < rowCount; i++) {
+                    var rowMedicine = tableBody.rows[i].cells[1].innerHTML; 
+                    if (rowMedicine === selectedMedicine) {
+                        var quantityCell = tableBody.rows[i].cells[2]; 
+                        var currentQuantity = parseInt(quantityCell.innerHTML);
+                        quantityCell.innerHTML = currentQuantity + 1;
+
+                        
+                        var amountCell = tableBody.rows[i].cells[3]; 
+                        var medicineAmount = getMedicineAmount(selectedMedicine);
+                        amountCell.innerHTML = (currentQuantity + 1) * medicineAmount;
+
+                        
+                        updateTotalAmount();
+                        medicineExists = true;
+                        break;
+                    }
+                }
+
+                if (!medicineExists) {
+                    var newRow = tableBody.insertRow(rowCount);
+
+                    
+                    var cell1 = newRow.insertCell(0);
+                    cell1.innerHTML = rowCount + 1; 
+
+                    
+                    var cell2 = newRow.insertCell(1);
+                    cell2.innerHTML = selectedMedicine;
+
+                    
+                    selectedMedicineNames.push(selectedMedicine);
+
+                    
+                    var cell3 = newRow.insertCell(2);
+                    cell3.innerHTML = 1;
+
+                    
+                    var cell4 = newRow.insertCell(3);
+                    var medicineAmount = getMedicineAmount(selectedMedicine);
+                    cell4.innerHTML = medicineAmount;
+
+                    updateTotalAmount();
+                }
+            } else {
+                alert("Please select a medicine.");
+            }
+        }
+
+
+
+        function updateTotalAmount() {
+            var totalAmountInput = document.getElementById("totalAmount");
+            var tableBody = document.getElementById("medicine-table-body");
+            var rowCount = tableBody.rows.length;
+            var totalAmount = 0;
+            for (var i = 0; i < rowCount; i++) {
+                totalAmount += parseInt(tableBody.rows[i].cells[3].innerHTML);
+            }
+            totalAmountInput.value = totalAmount;
+        }
+
+        var medicineDetails = JSON.parse('{{ q_json|safe }}');
+        function getMedicineAmount(selectedMedicine) {
+            return medicineDetails[selectedMedicine];
+        }
+
+
+
+        document.getElementById("MedicineT").addEventListener("change", handleMedicineSelection);
+
+        
+        function showDropdowns() {
+            console.log("showDropdowns() called");
+            var searchInput = document.getElementById("searchInput").value;
+            if (searchInput === "{{ id}}") {
+                toggleInvoice(); 
+                return false; 
+            }
+            return true; 
+        }
+
+        function toggleInvoice() {
+            var invoiceContainer = document.getElementById("form-container");
+            invoiceVisible = !invoiceVisible;
+            if (invoiceVisible) {
+                invoiceContainer.style.display = "block";
+            } else {
+                invoiceContainer.style.display = "none";
+            }
+        }
+
+
+
+        window.onclick = function (event) {
+            var invoiceContainer = document.getElementById("form-container");
+            if (event.target == invoiceContainer) {
+                toggleInvoice();
+            }
+        };
+
+        function viewMedicalBill(patientId) {
+            window.location.href = '/view_medical_bill/' + patientId;
+        }
+
+        function logout() {
+            window.location.href = "{% url 'me' %}";
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.keyCode === 39) {
+                event.preventDefault();
+            }
+        });
+
+    </script>
+</body>
+
+</html>

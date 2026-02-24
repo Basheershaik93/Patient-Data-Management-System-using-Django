@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+	<script type="text/javascript" src="{% static 'jquery/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery/jquery.slim.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery/popper.min.js' %}"></script>
+	<script type="text/javascript" src='{% static "js/bootstrap.min.js" %}'></script>
+    <title>Hospital Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+        .content {
+            position: relative;
+        }
+        .title {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            color: white; 
+            mix-blend-mode: difference; 
+            z-index: 1; 
+        }
+        .blink-logo {
+            position: absolute;
+            top: 50px; 
+            right: 90px; 
+            width: 200px;
+            height: 200px;
+            animation: blinker 1s linear infinite;
+            z-index: 1; 
+        }
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+        .blue-panel {
+            background-color: #0074D9; 
+            color: white;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            min-height: 100px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .blue-panel a {
+            color: white;
+            text-decoration: none;
+            margin: 10px;
+        }
+        .white-panel {
+            background-color: white;
+            color: #0074D9; 
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+        .white-panel:hover {
+            transform: translateY(-10px); 
+        }
+        .white-panel img {
+            width: 50px; 
+            height: 50px; 
+            margin-right: 10px; 
+        }
+        .description-container {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            color: gray;
+            transform: translateY(-50%);
+            max-width: 600px;
+            z-index: 1;
+        }
+        .description {
+            margin-left: 20px;
+            font-size: 23px; 
+        }
+        .button {
+            display: inline-block;
+            background-color: #0074D9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .button .arrow {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .additional-description {
+            display: none; 
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <img src="{% static 'image/Hospital.jpg' %}" alt="Hospital Image" style="width: 100%; height: auto;">
+        <h1 class="title">Hospital Management System</h1>
+        <img src="{% static 'image/blink-logo.png' %}" alt="Your Logo" class="blink-logo">
+        
+        <div class="description-container">
+            <div class="description">
+                <p><strong>Admin Login:</strong> This module allows administrative staff to access and manage various aspects of the hospital system.</p>
+                <p><strong>Medical Login:</strong> This module provides access to medical professionals to manage patient records, diagnoses, and treatments.</p>
+                <p><strong>Insurance:</strong> This module facilitates interactions with insurance providers for billing and claims processing.</p>
+                <button class="button" onclick="toggleDescription()">Learn More <span class="arrow">&#8593;</span></button>
+                <div class="additional-description" id="additionalDescription">
+                    <p>This hospital management system aims to streamline various administrative and medical processes within the hospital. It provides an intuitive interface for managing patient records, appointments, billing, and insurance claims. The system ensures efficient communication between medical staff, administrators, and insurance providers, ultimately enhancing patient care and organizational efficiency.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="blue-panel">
+        <div class="white-panel">
+            <img src="{% static 'image/admin-logo.png' %}" alt="Patients Logo">
+            <a href="{% url 'ad' %}" target="_blank" class="button">Admin Login <span class="arrow">&#8594;</span></a>
+        </div>
+        <div class="white-panel">
+            <img src="{% static 'image/medical-logo.png' %}" alt="Doctors Logo">
+            <a href="{% url 'me' %}" target="_blank" class="button">Medical Login <span class="arrow">&#8594;</span></a>
+        </div>
+        <div class="white-panel">
+            <img src="{% static 'image/insurance-logo.png' %}" alt="Admin Logo">
+            <a href="{% url 'in' %}" target="_blank" class="button">Insurance <span class="arrow">&#8594;</span></a>
+        </div>
+    </div>
+    <script>
+        function toggleDescription() {
+            var additionalDescription = document.getElementById("additionalDescription");
+            additionalDescription.style.display = (additionalDescription.style.display === "block") ? "none" : "block";
+            var learnMoreButton = document.querySelector(".button");
+            learnMoreButton.style.display = "none";  
+
+        }
+    </script>
+    <footer class="footer mt-auto py-3">
+        <div class="container text-center">
+            <span class="text-muted">© 2024 Hospital Management System. All rights reserved.</span>
+        </div>
+    </footer>    
+</body>
+</html
+

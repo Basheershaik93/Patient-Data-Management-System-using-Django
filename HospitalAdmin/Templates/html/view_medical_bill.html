@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Bill</title>
+</head>
+<body>
+    <h1>Patient Information</h1>
+    <p>Name: {{ patient.name }}</p>
+    <p>Email: {{ patient.Email }}</p>
+
+    <h1>Invoices</h1>
+    <ul>
+        {% for i in invoices %}
+            {% if i.patient == z %}
+                <li>Date: {{ i.date }}</li>
+                <li>Medicine Name: {{ i.medicine_name }}</li>
+                <li>Quantity: {{ i.quantity }}</li>
+                <li>Total Amount: {{ i.total_amount }}</li>
+                <hr>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
