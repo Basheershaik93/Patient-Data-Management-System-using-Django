@@ -107,7 +107,7 @@ Patient-Data-Management-System-using-Django/
 ## 📄 Full Project Report
 
 The complete final report (including abstract, DFDs, ER diagram, use case diagrams, class/sequence diagrams, data dictionary, etc.) is available here:  
-[Final Report - Patient Data Management System (DOCX/PDF)](https://1drv.ms/w/c/2978854f35982d77/IQCuAODgQPIWSY55AAe2KG8eAfMr8SrWpeQ6bhGIEnnnqhY?e=PIJPDn)
+[Final Report - Patient Data Management System (DOCX/PDF)](https://1drv.ms/w/c/2978854f35982d77/IQCuAODgQPIWSY55AAe2KG8eAfMr8SrWpeQ6bhGIEnnnqhY?e=dLfj7z)
 
 - Submitted to: SRM University – AP  
 - For: Software Engineering Course (6th Semester Final Project)
