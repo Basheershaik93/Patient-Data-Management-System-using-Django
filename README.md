@@ -96,7 +96,7 @@ Patient-Data-Management-System-using-Django/
 2. Create & activate virtual environment
    python -m venv venv
    venv\Scripts\activate        # Windows
-   # source venv/bin/activate   # macOS/Linux
+   source venv/bin/activate   # macOS/Linux
 3. Install dependencies and apply migrations
    pip install django
    python manage.py migrate
