@@ -77,14 +77,22 @@ This role-based access ensures secure, auditable, and fraud-resistant processing
 ## 📁 Project Structure
 
 Patient-Data-Management-System-using-Django/
+
 ├── HospitalAdmin/              # Django project root
+
 │   ├── DemoApp/                # Main application (models, views, forms)
+
 │   ├── HospitalAdmin/          # Settings, urls, wsgi
+
 │   ├── manage.py
+
 │   ├── Templates/              # HTML templates (html/ subfolder)
+
 │   ├── static/                 # CSS, JS, images
 │   └── db.sqlite3              # Database (not committed)
+
 ├── requirements.txt
+
 └── README.md
 
 
